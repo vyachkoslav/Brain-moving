@@ -15,10 +15,12 @@ public class UIInputProvider : MonoBehaviour
     [SerializeField] ToggleButton rotateButton;
     [SerializeField] UIButton scaleUpButton;
     [SerializeField] UIButton scaleDownButton;
+    [SerializeField] UIButton resetButton;
 
     private void Awake()
     {
         selectButton.onClick.AddListener(() => OnSelect?.Invoke());
+        resetButton.onClick.AddListener(() => OnReset?.Invoke());
     }
 
     static int ButtonToInt(UIButton button)
@@ -72,6 +74,15 @@ public class UIInputProvider : MonoBehaviour
         }
     }
     public UnityEvent OnSelect;
+
+    public bool Reset
+    {
+        get
+        {
+            return resetButton.isDown;
+        }
+    }
+    public UnityEvent OnReset;
 
     public float Scale
     {
