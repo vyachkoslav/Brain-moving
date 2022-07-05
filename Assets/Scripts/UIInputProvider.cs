@@ -13,6 +13,8 @@ public class UIInputProvider : MonoBehaviour
     [SerializeField] UIButton leftButton;
     [SerializeField] UIButton selectButton;
     [SerializeField] ToggleButton rotateButton;
+    [SerializeField] UIButton scaleUpButton;
+    [SerializeField] UIButton scaleDownButton;
 
     private void Awake()
     {
@@ -70,4 +72,12 @@ public class UIInputProvider : MonoBehaviour
         }
     }
     public UnityEvent OnSelect;
+
+    public float Scale
+    {
+        get
+        {
+            return ButtonToInt(scaleUpButton) - ButtonToInt(scaleDownButton);
+        }
+    }
 }

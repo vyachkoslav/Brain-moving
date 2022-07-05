@@ -12,4 +12,8 @@ public class GrabbableObject : MonoBehaviour
     {
         transform.eulerAngles += euler;
     }
+    public void AddScale(float value)
+    {
+        transform.localScale += Vector3.one * value;
+    }
 }
