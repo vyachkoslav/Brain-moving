@@ -338,3 +338,14 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Brain moving.sln
+/Assembly-CSharp.csproj
+/Assembly-CSharp-Editor.csproj
+/.vsconfig
+/Temp
+/Library
+/Assets/XRI/Settings
+/Assets/XR
+/Assets/TutorialInfo
+/Assets/TextMesh Pro
+/Assets/Settings
