@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 [ExecuteInEditMode]
 public class TwoPlanesCuttingController : MonoBehaviour {
 
     public GameObject plane1;
     public GameObject plane2;
-    public Renderer rend;
+    public List<Renderer> rend;
 
     private Vector3 normal1;
     private Vector3 position1;
@@ -35,8 +37,7 @@ public class TwoPlanesCuttingController : MonoBehaviour {
     {
         if(m_MaterialPropertyBlock == null)
             m_MaterialPropertyBlock = new MaterialPropertyBlock();
-        else
-            print(m_MaterialPropertyBlock);
+
         if (plane1) {
             normal1 = plane1.transform.TransformVector(new Vector3(0, 0, -1));
             position1 = plane1.transform.position;
@@ -58,6 +59,6 @@ public class TwoPlanesCuttingController : MonoBehaviour {
         m_MaterialPropertyBlock.SetVector("Vector3_Plane2_Normal", normal2);
         m_MaterialPropertyBlock.SetVector("Vector3_Plane2_Position", position2);
 
-        rend.SetPropertyBlock(m_MaterialPropertyBlock);
+        rend.ForEach(x => x.SetPropertyBlock(m_MaterialPropertyBlock));
     }
 }
