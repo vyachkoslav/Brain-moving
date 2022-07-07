@@ -144,7 +144,6 @@ public class ControlPanel : MonoBehaviour
         var contained = new List<ContainedObject>(grabbableParent.GetComponentsInChildren<ContainedObject>());
         contained.ForEach(x => x.active = !value);
         contained[0].active = value;
-        container.ResetArea();
     }
     
     void SaveGrabbables()

@@ -17,7 +17,7 @@ public class ContainerArea : MonoBehaviour
     /// <summary>
     /// Sets all children with rigidbody to not leave the container
     /// </summary>
-    public void ResetArea()
+    void ResetArea()
     {
         children = new List<ContainedObject>(gameObject.GetComponentsInChildren<ContainedObject>());
         children = children.FindAll(x => { return x.active; });
@@ -33,16 +33,19 @@ public class ContainerArea : MonoBehaviour
     {
         for(int i = 0; i < children.Count; ++i)
         {
-            Transform child = children[i].transform;
-            Transform parent = parents[i];
-
-            Vector3 posOnCollider = GetComponent<Collider>().ClosestPoint(child.position);
-            if (OutOfArea(child.position))
+            if (children[i].active)
             {
-                child.position = posOnCollider;
-                child.SetParent(parent);
-                parent.gameObject.SetActive(false);
-                parent.gameObject.SetActive(true);
+                Transform child = children[i].transform;
+                Transform parent = parents[i];
+
+                Vector3 posOnCollider = GetComponent<Collider>().ClosestPoint(child.position);
+                if (OutOfArea(child.position))
+                {
+                    child.position = posOnCollider;
+                    child.SetParent(parent);
+                    parent.gameObject.SetActive(false);
+                    parent.gameObject.SetActive(true);
+                }
             }
         }
     }

@@ -6,7 +6,7 @@ public class GrabbableObject : MonoBehaviour
 {
     public void Move(Vector3 dir)
     {
-        transform.localPosition += dir;
+        transform.position += transform.TransformDirection(dir);
     }
     public void Rotate(Vector3 euler)
     {
