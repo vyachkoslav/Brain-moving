@@ -105,8 +105,9 @@ public class ControlPanel : MonoBehaviour
     }
     void MoveCutter()
     {
-        Vector3 value = Vector3.Scale(k_invertor, input.Direction) * (speed * Time.deltaTime);
-        value = Vector3.Scale(value, cutterHorizontal.forward);
+        Vector3 value = Vector3.forward * input.Z * (speed * Time.deltaTime);
+        value = cutterHorizontal.TransformDirection(value);
+
         cutterHorizontal.position += value;
     }
 
