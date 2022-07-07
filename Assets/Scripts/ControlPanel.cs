@@ -11,10 +11,9 @@ public class ControlPanel : MonoBehaviour
         public Vector3 position, scale;
         public Quaternion rotation;
     }
-    [SerializeField] ObjectGrabber grabber;
 
     [SerializeField] GrabbableObject grabbableParent;
-    GrabbableObject selected;
+    GrabbableObject selected => grabbables[currentGrabbable];
     List<GrabbableObject> grabbables;
     List<TransformValues> defaultValues;
     int currentGrabbable;
@@ -25,6 +24,8 @@ public class ControlPanel : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float rotationSpeed;
     [SerializeField] float scalingSpeed;
+    [SerializeField] float maxScale;
+    float defaultScale;
 
     [SerializeField] float secondsToSleep;
     float remainingTimeToSleep;
@@ -32,18 +33,17 @@ public class ControlPanel : MonoBehaviour
 
     [SerializeField] Transform cutterHorizontal;
 
-    public void SetGrabber(ObjectGrabber _grabber)
-    {
-        grabber = _grabber;
-    }
+    readonly Vector3 k_invertor = new Vector3(-1, 1, -1);
+    
     void Start()
     {
         ResetTime();
 
         defaultValues = new List<TransformValues>();
+        defaultScale = grabbableParent.transform.lossyScale.x;
+
         grabbables = new List<GrabbableObject>(grabbableParent.GetComponentsInChildren<GrabbableObject>());
 
-        selected = grabbables[currentGrabbable]; // parent
         SelectAll(true);
 
         SaveGrabbables();
@@ -63,7 +63,6 @@ public class ControlPanel : MonoBehaviour
             if (currentGrabbable != 0)
             {
                 currentGrabbable = 0;
-                selected = grabbables[currentGrabbable];
                 SelectAll(true);
             }
 
@@ -79,7 +78,8 @@ public class ControlPanel : MonoBehaviour
             MoveSelected();
         }
 
-        ScaleSelected();
+        if(input.Scale != 0)
+            ScaleSelected();
     }
 
     void RotateSelected()
@@ -97,7 +97,7 @@ public class ControlPanel : MonoBehaviour
     {
         if (!input.CutterToggle)
         {
-            Vector3 value = input.Direction * (speed * Time.deltaTime);
+            Vector3 value = Vector3.Scale(k_invertor, input.Direction) * (speed * Time.deltaTime);
             selected.Move(value);
         }
         else
@@ -105,18 +105,28 @@ public class ControlPanel : MonoBehaviour
     }
     void MoveCutter()
     {
-        Vector3 value = input.Direction * (speed * Time.deltaTime);
+        Vector3 value = Vector3.Scale(k_invertor, input.Direction) * (speed * Time.deltaTime);
         value = Vector3.Scale(value, cutterHorizontal.forward);
         cutterHorizontal.position += value;
     }
 
     void ScaleSelected()
     {
-        float value = input.Scale * scalingSpeed * Time.deltaTime;
         if (!input.CutterToggle)
-            selected.AddScale(value);
-    }
+        {
+            float currentScale = selected.transform.lossyScale.x;
 
+            float value = input.Scale * (scalingSpeed * Time.deltaTime);
+            value = Mathf.Clamp(value + currentScale, defaultScale - maxScale, defaultScale + maxScale);
+
+            SetGlobalScale(selected, value);
+        }
+    }
+    static void SetGlobalScale(GrabbableObject obj, float value)
+    {
+        obj.SetScale(1);
+        obj.SetScale(value / obj.transform.lossyScale.x);
+    }
 
     void SelectNext()
     {
@@ -128,8 +138,6 @@ public class ControlPanel : MonoBehaviour
         }
         else
             SelectAll(false);
-
-        selected = grabbables[currentGrabbable];
     }
     void SelectAll(bool value)
     {

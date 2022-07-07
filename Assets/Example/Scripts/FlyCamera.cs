@@ -33,8 +33,6 @@ public class FlyCamera : MonoBehaviour
     {
         input = Keyboard.current;
         mouse = Mouse.current;
-
-        InputProvider.OnToggle += InputProvider.FuncToCallback(TryToggleButton);
     }
     void Update()
     {
@@ -107,17 +105,5 @@ public class FlyCamera : MonoBehaviour
             p_Velocity += new Vector3(1, 0, 0);
         }
         return p_Velocity;
-    }
-    
-    bool TryToggleButton()
-    {
-        if (Physics.Raycast(transform.position, transform.forward, out var hit, raycastDistance, layerMask))
-        {
-            ToggleButton button = hit.transform.GetComponent<ToggleButton>() ??
-                                  hit.transform.GetComponentInParent<ToggleButton>();
-            if(button)
-                button.Toggle();
-        }
-        return false;
     }
 }

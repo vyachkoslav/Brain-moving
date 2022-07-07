@@ -24,12 +24,6 @@ public class UIInputProvider : MonoBehaviour
         resetButton.onClick.AddListener(() => OnReset?.Invoke());
     }
 
-    static int ButtonToInt(UIButton button)
-    {
-        if (!button)
-            return 0;
-        return button.isDown ? 1 : 0;
-    }
     public float Z
     {
         get
@@ -63,14 +57,14 @@ public class UIInputProvider : MonoBehaviour
     {
         get
         {
-            return rotateButton.Active;
+            return GetToggleActivated(rotateButton);
         }
     }
     public bool CutterToggle
     {
         get
         {
-            return cuttersButton.Active;
+            return GetToggleActivated(cuttersButton);
         }
     }
 
@@ -78,7 +72,7 @@ public class UIInputProvider : MonoBehaviour
     {
         get
         {
-            return selectButton.isDown;
+            return GetButtonPressed(selectButton);
         }
     }
     public UnityEvent OnSelect;
@@ -87,7 +81,7 @@ public class UIInputProvider : MonoBehaviour
     {
         get
         {
-            return resetButton.isDown;
+            return GetButtonPressed(resetButton);
         }
     }
     public UnityEvent OnReset;
@@ -98,5 +92,24 @@ public class UIInputProvider : MonoBehaviour
         {
             return ButtonToInt(scaleUpButton) - ButtonToInt(scaleDownButton);
         }
+    }
+
+    static int ButtonToInt(UIButton button)
+    {
+        if (!button)
+            return 0;
+        return button.isDown ? 1 : 0;
+    }
+    static bool GetButtonPressed(UIButton button)
+    {
+        if (!button)
+            return false;
+        return button.isDown;
+    }
+    static bool GetToggleActivated(ToggleButton toggle)
+    {
+        if (!toggle)
+            return false;
+        return toggle.Active;
     }
 }
