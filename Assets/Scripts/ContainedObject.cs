@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ContainedObject : MonoBehaviour
+namespace ControlPanel
 {
-    public bool active = true;
+    public class ContainedObject : MonoBehaviour
+    {
+        public bool active = true;
+    }
 }

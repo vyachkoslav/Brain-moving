@@ -3,107 +3,110 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FlyCamera : MonoBehaviour
+namespace ControlPanel
 {
-
-    /*
-    Writen by Windexglow 11-13-10.  Use it, edit it, steal it I don't care.  
-    Converted to C# 27-02-13 - no credit wanted.
-    Simple flycam I made, since I couldn't find any others made public.  
-    Made simple to use (drag and drop, done) for regular keyboard layout  
-    wasd : basic movement
-    shift : Makes camera accelerate
-    space : Moves camera on X and Z axis only.  So camera doesn't gain any height*/
-    public bool lockPosition;
-    public bool lockRotation;
-
-    float mainSpeed = 10.0f; //regular speed
-    float shiftAdd = 25.0f; //multiplied by how long shift is held.  Basically running
-    float maxShift = 100.0f; //Maximum speed when holdin gshift
-    float camSens = 0.1f; //How sensitive it with mouse
-    private Vector2 lastMouse = new Vector2(255, 255); //kind of in the middle of the screen, rather than at the top (play)
-    private float totalRun = 1.0f;
-    Keyboard input;
-    Mouse mouse;
-
-    [SerializeField] float raycastDistance;
-    [SerializeField] int layerMask;
-
-    private void Start()
+    public class FlyCamera : MonoBehaviour
     {
-        input = Keyboard.current;
-        mouse = Mouse.current;
-    }
-    void Update()
-    {
-        if (!lockRotation)
+
+        /*
+        Writen by Windexglow 11-13-10.  Use it, edit it, steal it I don't care.  
+        Converted to C# 27-02-13 - no credit wanted.
+        Simple flycam I made, since I couldn't find any others made public.  
+        Made simple to use (drag and drop, done) for regular keyboard layout  
+        wasd : basic movement
+        shift : Makes camera accelerate
+        space : Moves camera on X and Z axis only.  So camera doesn't gain any height*/
+        public bool lockPosition;
+        public bool lockRotation;
+
+        float mainSpeed = 10.0f; //regular speed
+        float shiftAdd = 25.0f; //multiplied by how long shift is held.  Basically running
+        float maxShift = 100.0f; //Maximum speed when holdin gshift
+        float camSens = 0.1f; //How sensitive it with mouse
+        private Vector2 lastMouse = new Vector2(255, 255); //kind of in the middle of the screen, rather than at the top (play)
+        private float totalRun = 1.0f;
+        Keyboard input;
+        Mouse mouse;
+
+        [SerializeField] float raycastDistance;
+        [SerializeField] int layerMask;
+
+        private void Start()
         {
-            lastMouse = mouse.position.ReadValue() - lastMouse;
-            lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
-            lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x, transform.eulerAngles.y + lastMouse.y, 0);
-            transform.eulerAngles = lastMouse;
-            lastMouse = mouse.position.ReadValue();
+            input = Keyboard.current;
+            mouse = Mouse.current;
         }
-        
-        //Mouse  camera angle done.  
-        
-        //Keyboard commands
-        float f = 0.0f;
-        Vector3 p = GetBaseInput();
-        if (p.sqrMagnitude > 0)
-        { // only move while a direction key is pressed
-            if (input.shiftKey.ReadValue() != 0)
+        void Update()
+        {
+            if (!lockRotation)
             {
-                totalRun += Time.deltaTime;
-                p = p * totalRun * shiftAdd;
-                p.x = Mathf.Clamp(p.x, -maxShift, maxShift);
-                p.y = Mathf.Clamp(p.y, -maxShift, maxShift);
-                p.z = Mathf.Clamp(p.z, -maxShift, maxShift);
-            }
-            else
-            {
-                totalRun = Mathf.Clamp(totalRun * 0.5f, 1f, 1000f);
-                p = p * mainSpeed;
+                lastMouse = mouse.position.ReadValue() - lastMouse;
+                lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0);
+                lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x, transform.eulerAngles.y + lastMouse.y, 0);
+                transform.eulerAngles = lastMouse;
+                lastMouse = mouse.position.ReadValue();
             }
 
-            p = p * Time.deltaTime;
-            Vector3 newPosition = transform.position;
-            if (input.spaceKey.ReadValue() != 0)
-            { //If player wants to move on X and Z axis only
-                transform.Translate(p);
-                newPosition.x = transform.position.x;
-                newPosition.z = transform.position.z;
-                transform.position = newPosition;
-            }
-            else
-            {
-                transform.Translate(p);
+            //Mouse  camera angle done.  
+
+            //Keyboard commands
+            float f = 0.0f;
+            Vector3 p = GetBaseInput();
+            if (p.sqrMagnitude > 0)
+            { // only move while a direction key is pressed
+                if (input.shiftKey.ReadValue() != 0)
+                {
+                    totalRun += Time.deltaTime;
+                    p = p * totalRun * shiftAdd;
+                    p.x = Mathf.Clamp(p.x, -maxShift, maxShift);
+                    p.y = Mathf.Clamp(p.y, -maxShift, maxShift);
+                    p.z = Mathf.Clamp(p.z, -maxShift, maxShift);
+                }
+                else
+                {
+                    totalRun = Mathf.Clamp(totalRun * 0.5f, 1f, 1000f);
+                    p = p * mainSpeed;
+                }
+
+                p = p * Time.deltaTime;
+                Vector3 newPosition = transform.position;
+                if (input.spaceKey.ReadValue() != 0)
+                { //If player wants to move on X and Z axis only
+                    transform.Translate(p);
+                    newPosition.x = transform.position.x;
+                    newPosition.z = transform.position.z;
+                    transform.position = newPosition;
+                }
+                else
+                {
+                    transform.Translate(p);
+                }
             }
         }
-    }
 
-    private Vector3 GetBaseInput()
-    { //returns the basic values, if it's 0 than it's not active.
-        Vector3 p_Velocity = new Vector3();
-        if (lockPosition)
+        private Vector3 GetBaseInput()
+        { //returns the basic values, if it's 0 than it's not active.
+            Vector3 p_Velocity = new Vector3();
+            if (lockPosition)
+                return p_Velocity;
+
+            if (input.wKey.ReadValue() != 0)
+            {
+                p_Velocity += new Vector3(0, 0, 1);
+            }
+            if (input.sKey.ReadValue() != 0)
+            {
+                p_Velocity += new Vector3(0, 0, -1);
+            }
+            if (input.aKey.ReadValue() != 0)
+            {
+                p_Velocity += new Vector3(-1, 0, 0);
+            }
+            if (input.dKey.ReadValue() != 0)
+            {
+                p_Velocity += new Vector3(1, 0, 0);
+            }
             return p_Velocity;
-
-        if (input.wKey.ReadValue() != 0)
-        {
-            p_Velocity += new Vector3(0, 0, 1);
         }
-        if (input.sKey.ReadValue() != 0)
-        {
-            p_Velocity += new Vector3(0, 0, -1);
-        }
-        if (input.aKey.ReadValue() != 0)
-        {
-            p_Velocity += new Vector3(-1, 0, 0);
-        }
-        if (input.dKey.ReadValue() != 0)
-        {
-            p_Velocity += new Vector3(1, 0, 0);
-        }
-        return p_Velocity;
     }
 }

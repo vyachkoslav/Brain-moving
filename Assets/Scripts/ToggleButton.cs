@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ToggleButton : MonoBehaviour
+namespace ControlPanel
 {
-    public bool Active { get; private set; }
-    public void Toggle()
+    public class ToggleButton : MonoBehaviour
     {
-        Active = !Active;
-        InvokeEvents();
-    }
-    void InvokeEvents()
-    {
-        OnToggle?.Invoke(Active);
+        public bool Active { get; private set; }
+        public void Toggle()
+        {
+            Active = !Active;
+            InvokeEvents();
+        }
+        void InvokeEvents()
+        {
+            OnToggle?.Invoke(Active);
 
-        if(Active)
-            OnTurnedOn?.Invoke();
-        else
-            OnTurnedOff?.Invoke();
-    }
+            if (Active)
+                OnTurnedOn?.Invoke();
+            else
+                OnTurnedOff?.Invoke();
+        }
 
-    public UnityEvent<bool> OnToggle;
-    public UnityEvent OnTurnedOn;
-    public UnityEvent OnTurnedOff;
+        public UnityEvent<bool> OnToggle;
+        public UnityEvent OnTurnedOn;
+        public UnityEvent OnTurnedOff;
+    }
 }

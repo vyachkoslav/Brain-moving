@@ -3,113 +3,116 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class UIInputProvider : MonoBehaviour
+namespace ControlPanel
 {
-    [SerializeField] UIButton forwardButton;
-    [SerializeField] UIButton backwardButton;
-    [SerializeField] UIButton upButton;
-    [SerializeField] UIButton downButton;
-    [SerializeField] UIButton rightButton;
-    [SerializeField] UIButton leftButton;
-    [SerializeField] UIButton selectButton;
-    [SerializeField] ToggleButton rotateButton;
-    [SerializeField] ToggleButton cuttersButton;
-    [SerializeField] UIButton scaleUpButton;
-    [SerializeField] UIButton scaleDownButton;
-    [SerializeField] UIButton resetButton;
+    public class UIInputProvider : MonoBehaviour
+    {
+        [SerializeField] UIButton forwardButton;
+        [SerializeField] UIButton backwardButton;
+        [SerializeField] UIButton upButton;
+        [SerializeField] UIButton downButton;
+        [SerializeField] UIButton rightButton;
+        [SerializeField] UIButton leftButton;
+        [SerializeField] UIButton selectButton;
+        [SerializeField] ToggleButton rotateButton;
+        [SerializeField] ToggleButton cuttersButton;
+        [SerializeField] UIButton scaleUpButton;
+        [SerializeField] UIButton scaleDownButton;
+        [SerializeField] UIButton resetButton;
 
-    private void Awake()
-    {
-        selectButton.onClick.AddListener(() => OnSelect?.Invoke());
-        resetButton.onClick.AddListener(() => OnReset?.Invoke());
-    }
+        private void Awake()
+        {
+            selectButton.onClick.AddListener(() => OnSelect?.Invoke());
+            resetButton.onClick.AddListener(() => OnReset?.Invoke());
+        }
 
-    public float Z
-    {
-        get
+        public float Z
         {
-            return ButtonToInt(forwardButton) - ButtonToInt(backwardButton);
+            get
+            {
+                return ButtonToInt(forwardButton) - ButtonToInt(backwardButton);
+            }
         }
-    }
-    public float X
-    {
-        get
+        public float X
         {
-            return ButtonToInt(rightButton) - ButtonToInt(leftButton);
+            get
+            {
+                return ButtonToInt(rightButton) - ButtonToInt(leftButton);
+            }
         }
-    }
-    public float Y
-    {
-        get
+        public float Y
         {
-            return ButtonToInt(upButton) - ButtonToInt(downButton);
+            get
+            {
+                return ButtonToInt(upButton) - ButtonToInt(downButton);
+            }
         }
-    }
-    public Vector3 Direction
-    {
-        get
+        public Vector3 Direction
         {
-            return new Vector3(X, Y, Z);
+            get
+            {
+                return new Vector3(X, Y, Z);
+            }
         }
-    }
 
-    public bool RotateToggle
-    {
-        get
+        public bool RotateToggle
         {
-            return GetToggleActivated(rotateButton);
+            get
+            {
+                return GetToggleActivated(rotateButton);
+            }
         }
-    }
-    public bool CutterToggle
-    {
-        get
+        public bool CutterToggle
         {
-            return GetToggleActivated(cuttersButton);
+            get
+            {
+                return GetToggleActivated(cuttersButton);
+            }
         }
-    }
 
-    public bool Select
-    {
-        get
+        public bool Select
         {
-            return GetButtonPressed(selectButton);
+            get
+            {
+                return GetButtonPressed(selectButton);
+            }
         }
-    }
-    public UnityEvent OnSelect;
+        public UnityEvent OnSelect;
 
-    public bool Reset
-    {
-        get
+        public bool Reset
         {
-            return GetButtonPressed(resetButton);
+            get
+            {
+                return GetButtonPressed(resetButton);
+            }
         }
-    }
-    public UnityEvent OnReset;
+        public UnityEvent OnReset;
 
-    public float Scale
-    {
-        get
+        public float Scale
         {
-            return ButtonToInt(scaleUpButton) - ButtonToInt(scaleDownButton);
+            get
+            {
+                return ButtonToInt(scaleUpButton) - ButtonToInt(scaleDownButton);
+            }
         }
-    }
 
-    static int ButtonToInt(UIButton button)
-    {
-        if (!button)
-            return 0;
-        return button.isDown ? 1 : 0;
-    }
-    static bool GetButtonPressed(UIButton button)
-    {
-        if (!button)
-            return false;
-        return button.isDown;
-    }
-    static bool GetToggleActivated(ToggleButton toggle)
-    {
-        if (!toggle)
-            return false;
-        return toggle.Active;
+        static int ButtonToInt(UIButton button)
+        {
+            if (!button)
+                return 0;
+            return button.isDown ? 1 : 0;
+        }
+        static bool GetButtonPressed(UIButton button)
+        {
+            if (!button)
+                return false;
+            return button.isDown;
+        }
+        static bool GetToggleActivated(ToggleButton toggle)
+        {
+            if (!toggle)
+                return false;
+            return toggle.Active;
+        }
     }
 }

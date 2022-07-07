@@ -5,24 +5,27 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
-public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+namespace ControlPanel
 {
-    public bool isDown { get; private set; }
-    public UnityEvent onClick;
-
-    void Awake()
+    [RequireComponent(typeof(Button))]
+    public class UIButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        GetComponent<Button>().onClick.AddListener(() => onClick?.Invoke());
-    }
+        public bool isDown { get; private set; }
+        public UnityEvent onClick;
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        isDown = true;
-    }
+        void Awake()
+        {
+            GetComponent<Button>().onClick.AddListener(() => onClick?.Invoke());
+        }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        isDown = false;
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            isDown = true;
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            isDown = false;
+        }
     }
 }
