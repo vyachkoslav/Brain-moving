@@ -30,6 +30,8 @@ public class ControlPanel : MonoBehaviour
     float remainingTimeToSleep;
     [SerializeField] float sleepRotationSpeed;
 
+    [SerializeField] Transform cutterHorizontal;
+
     public void SetGrabber(ObjectGrabber _grabber)
     {
         grabber = _grabber;
@@ -51,14 +53,14 @@ public class ControlPanel : MonoBehaviour
     }
     void Update()
     {
-        if (input.Direction == Vector3.zero && input.Scale == 0)
+        if (input.Direction == Vector3.zero && input.Scale == 0 && remainingTimeToSleep > 0)
             remainingTimeToSleep -= Time.deltaTime;
         else
             ResetTime();
 
-        if(remainingTimeToSleep <= 0)
+        if (remainingTimeToSleep <= 0)
         {
-            if(currentGrabbable != 0)
+            if (currentGrabbable != 0)
             {
                 currentGrabbable = 0;
                 selected = grabbables[currentGrabbable];
@@ -68,21 +70,54 @@ public class ControlPanel : MonoBehaviour
             selected.Rotate(Vector3.up * sleepRotationSpeed * Time.deltaTime);
         }
 
-        if (selected)
+        if (input.RotateToggle)
         {
-            if (input.ControlModifier)
-            {
-                Vector3 direction = new Vector3(input.Z, input.Y, input.X);
-                selected.Rotate(direction * rotationSpeed * Time.deltaTime);
-            }
-            else
-            {
-                selected.Move(input.Direction * speed * Time.deltaTime);
-            }
-
-            selected.AddScale(input.Scale * scalingSpeed * Time.deltaTime);
+            RotateSelected();
         }
+        else
+        {
+            MoveSelected();
+        }
+
+        ScaleSelected();
     }
+
+    void RotateSelected()
+    {
+        if (!input.CutterToggle)
+        {
+            Vector3 direction = new Vector3(input.Z, input.Y, input.X);
+            Vector3 value = direction * rotationSpeed * Time.deltaTime;
+            selected.Rotate(value);
+        }
+        else
+            MoveCutter();
+    }
+    void MoveSelected()
+    {
+        if (!input.CutterToggle)
+        {
+            Vector3 value = input.Direction * (speed * Time.deltaTime);
+            selected.Move(value);
+        }
+        else
+            MoveCutter();
+    }
+    void MoveCutter()
+    {
+        Vector3 value = input.Direction * (speed * Time.deltaTime);
+        value = Vector3.Scale(value, cutterHorizontal.forward);
+        cutterHorizontal.position += value;
+    }
+
+    void ScaleSelected()
+    {
+        float value = input.Scale * scalingSpeed * Time.deltaTime;
+        if (!input.CutterToggle)
+            selected.AddScale(value);
+    }
+
+
     void SelectNext()
     {
         ResetTime();
@@ -122,10 +157,12 @@ public class ControlPanel : MonoBehaviour
     }
     TransformValues GetValues(Transform obj)
     {
-        TransformValues values = new TransformValues();
-        values.position = obj.localPosition;
-        values.rotation = obj.localRotation;
-        values.scale = obj.localScale;
+        TransformValues values = new TransformValues
+        {
+            position = obj.localPosition,
+            rotation = obj.localRotation,
+            scale = obj.localScale
+        };
         return values;
     }
     void FillValues(Transform obj, TransformValues values)

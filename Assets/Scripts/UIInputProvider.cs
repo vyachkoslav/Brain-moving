@@ -13,6 +13,7 @@ public class UIInputProvider : MonoBehaviour
     [SerializeField] UIButton leftButton;
     [SerializeField] UIButton selectButton;
     [SerializeField] ToggleButton rotateButton;
+    [SerializeField] ToggleButton cuttersButton;
     [SerializeField] UIButton scaleUpButton;
     [SerializeField] UIButton scaleDownButton;
     [SerializeField] UIButton resetButton;
@@ -58,11 +59,18 @@ public class UIInputProvider : MonoBehaviour
         }
     }
 
-    public bool ControlModifier
+    public bool RotateToggle
     {
         get
         {
             return rotateButton.Active;
+        }
+    }
+    public bool CutterToggle
+    {
+        get
+        {
+            return cuttersButton.Active;
         }
     }
 
