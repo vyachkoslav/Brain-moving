@@ -35,6 +35,8 @@ namespace ControlPanel
 
         [SerializeField] Transform cutterHorizontal;
 
+        [SerializeField] Transform direction;
+
         readonly Vector3 k_invertor = new Vector3(-1, 1, -1);
 
         void Start()
@@ -55,7 +57,7 @@ namespace ControlPanel
         }
         void Update()
         {
-            if (input.Direction == Vector3.zero && input.Scale == 0 && remainingTimeToSleep > 0)
+            if (input.Direction == Vector3.zero && input.Scale == 0)
                 remainingTimeToSleep -= Time.deltaTime;
             else
                 ResetTime();
@@ -71,13 +73,16 @@ namespace ControlPanel
                 selected.Rotate(Vector3.up * sleepRotationSpeed * Time.deltaTime);
             }
 
-            if (input.RotateToggle)
+            if(input.Direction != Vector3.zero)
             {
-                RotateSelected();
-            }
-            else
-            {
-                MoveSelected();
+                if (input.RotateToggle)
+                {
+                    RotateSelected();
+                }
+                else
+                {
+                    MoveSelected();
+                }
             }
 
             if (input.Scale != 0)
@@ -99,7 +104,8 @@ namespace ControlPanel
         {
             if (!input.CutterToggle)
             {
-                Vector3 value = Vector3.Scale(k_invertor, input.Direction) * (speed * Time.deltaTime);
+                Vector3 value = input.Direction * (speed * Time.deltaTime);
+                value = direction.TransformDirection(value);
                 selected.Move(value);
             }
             else

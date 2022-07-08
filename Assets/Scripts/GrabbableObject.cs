@@ -8,7 +8,7 @@ namespace ControlPanel
     {
         public void Move(Vector3 dir)
         {
-            transform.position += transform.TransformDirection(dir);
+            transform.position += dir;
         }
         public void Rotate(Vector3 euler)
         {
