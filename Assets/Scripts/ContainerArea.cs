@@ -5,6 +5,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 namespace ControlPanel
 {
+    /// <summary>
+    /// Doesn't pass objects out of its collider
+    /// </summary>
     public class ContainerArea : MonoBehaviour
     {
         [SerializeField] float maxOutDistance;
@@ -16,9 +19,6 @@ namespace ControlPanel
             ResetArea();
         }
 
-        /// <summary>
-        /// Sets all children with rigidbody to not leave the container
-        /// </summary>
         void ResetArea()
         {
             children = new List<ContainedObject>(gameObject.GetComponentsInChildren<ContainedObject>());

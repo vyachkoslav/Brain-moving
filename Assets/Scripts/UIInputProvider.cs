@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 namespace ControlPanel
 {
+    /// <summary>
+    /// Provides button inputs
+    /// </summary>
     public class UIInputProvider : MonoBehaviour
     {
         [SerializeField] UIButton forwardButton;

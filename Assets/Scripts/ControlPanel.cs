@@ -6,28 +6,39 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 namespace ControlPanel
 {
+    /// <summary>
+    /// Controller of object using button inputs
+    /// </summary>
     public class ControlPanel : MonoBehaviour
     {
+        /// <summary>
+        /// Parent of all grabbables
+        /// </summary>
+        [Header("Object")]
         [SerializeField] GrabbableObject grabbableParent;
+
         List<GrabbableObject> grabbables;
         int currentGrabbable;
         GrabbableObject selected => grabbables[currentGrabbable];
 
-        [SerializeField] ContainerArea container;
-
-        [SerializeField] UIInputProvider input;
+        [Header("Transforming settings")]
         [SerializeField] float speed;
         [SerializeField] float rotationSpeed;
         [SerializeField] float scalingSpeed;
         [SerializeField] float maxScale;
         float defaultScale;
 
+        [Header("Sleep options")]
         [SerializeField] float secondsToSleep;
         float remainingTimeToSleep;
         [SerializeField] float sleepRotationSpeed;
 
+        [Header("Other")]
+        [SerializeField] UIInputProvider input;
         [SerializeField] Transform cutterHorizontal;
-
+        /// <summary>
+        /// Direction in which object moves
+        /// </summary>
         [SerializeField] Transform direction;
 
         readonly ObjectSaver saver = new ObjectSaver();

@@ -147,43 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &303938695
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 303938696}
-  m_Layer: 0
-  m_Name: Direction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &303938696
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303938695}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -0, y: 0, z: -0.175}
-  m_LocalScale: {x: 1, y: 1, z: 0.28997}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 320914808}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!4 &320914808 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8643350788636235189, guid: 7b32d7afaf52c654593ae48f9140d335,
-    type: 3}
-  m_PrefabInstance: {fileID: 8643350787262198390}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &376307571 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8643350788791352327, guid: 7b32d7afaf52c654593ae48f9140d335,
@@ -2002,16 +1965,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.488
-      objectReference: {fileID: 0}
-    - target: {fileID: 8643350788772412053, guid: 7b32d7afaf52c654593ae48f9140d335,
-        type: 3}
-      propertyPath: direction
-      value: 
-      objectReference: {fileID: 303938696}
-    - target: {fileID: 8643350788772412053, guid: 7b32d7afaf52c654593ae48f9140d335,
-        type: 3}
-      propertyPath: secondsToSleep
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b32d7afaf52c654593ae48f9140d335, type: 3}
