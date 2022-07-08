@@ -10,6 +10,8 @@ namespace ControlPanel
         [SerializeField] Image buttonImageComponent;
         [SerializeField] Color colorOn;
         [SerializeField] Color colorOff;
+        [SerializeField] List<Button> buttonsToTurn;
+
         public void SetColorOn()
         {
             buttonImageComponent.color = colorOn;
@@ -17,6 +19,14 @@ namespace ControlPanel
         public void SetColorOff()
         {
             buttonImageComponent.color = colorOff;
+        }
+        public void TurnOnButtons()
+        {
+            buttonsToTurn.ForEach(x => x.interactable = true);
+        }
+        public void TurnOffButtons()
+        {
+            buttonsToTurn.ForEach(x => x.interactable = false);
         }
     }
 }

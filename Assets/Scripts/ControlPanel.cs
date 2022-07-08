@@ -8,17 +8,10 @@ namespace ControlPanel
 {
     public class ControlPanel : MonoBehaviour
     {
-        class TransformValues
-        {
-            public Vector3 position, scale;
-            public Quaternion rotation;
-        }
-
         [SerializeField] GrabbableObject grabbableParent;
-        GrabbableObject selected => grabbables[currentGrabbable];
         List<GrabbableObject> grabbables;
-        List<TransformValues> defaultValues;
         int currentGrabbable;
+        GrabbableObject selected => grabbables[currentGrabbable];
 
         [SerializeField] ContainerArea container;
 
@@ -37,25 +30,26 @@ namespace ControlPanel
 
         [SerializeField] Transform direction;
 
-        readonly Vector3 k_invertor = new Vector3(-1, 1, -1);
+        readonly ObjectSaver saver = new ObjectSaver();
 
         void Start()
         {
-            ResetTime();
-
-            defaultValues = new List<TransformValues>();
             defaultScale = grabbableParent.transform.lossyScale.x;
-
             grabbables = new List<GrabbableObject>(grabbableParent.GetComponentsInChildren<GrabbableObject>());
 
+            ResetTime();
             SelectAll(true);
-
             SaveGrabbables();
 
             input.OnSelect.AddListener(SelectNext);
             input.OnReset.AddListener(ResetGrabbables);
         }
         void Update()
+        {
+            HandleSleep();
+            HandleInput();
+        }
+        void HandleSleep()
         {
             if (input.Direction == Vector3.zero && input.Scale == 0)
                 remainingTimeToSleep -= Time.deltaTime;
@@ -72,8 +66,10 @@ namespace ControlPanel
 
                 selected.Rotate(Vector3.up * sleepRotationSpeed * Time.deltaTime);
             }
-
-            if(input.Direction != Vector3.zero)
+        }
+        void HandleInput()
+        {
+            if (input.Direction != Vector3.zero)
             {
                 if (input.RotateToggle)
                 {
@@ -157,35 +153,12 @@ namespace ControlPanel
 
         void SaveGrabbables()
         {
-            defaultValues.Clear();
-            foreach (GrabbableObject grabbable in grabbables)
-            {
-                defaultValues.Add(GetValues(grabbable.transform));
-            }
+            grabbables.ForEach(x => saver.Save(x.transform));
         }
         void ResetGrabbables()
         {
             ResetTime();
-            for (int i = 0; i < defaultValues.Count; ++i)
-            {
-                FillValues(grabbables[i].transform, defaultValues[i]);
-            }
-        }
-        TransformValues GetValues(Transform obj)
-        {
-            TransformValues values = new TransformValues
-            {
-                position = obj.localPosition,
-                rotation = obj.localRotation,
-                scale = obj.localScale
-            };
-            return values;
-        }
-        void FillValues(Transform obj, TransformValues values)
-        {
-            obj.localPosition = values.position;
-            obj.localRotation = values.rotation;
-            obj.localScale = values.scale;
+            grabbables.ForEach(x => saver.Load(x.transform));
         }
         void ResetTime()
         {
