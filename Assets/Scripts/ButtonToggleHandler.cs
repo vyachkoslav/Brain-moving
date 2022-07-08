@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ControlPanel
 {
-    public class ChangeButton : MonoBehaviour
+    public class ButtonToggleHandler : MonoBehaviour
     {
         [SerializeField] Image buttonImageComponent;
         [SerializeField] Color colorOn;
