@@ -158,7 +158,6 @@ namespace ControlPanel
         }
         void SelectAll(bool value)
         {
-            print(value);
             var contained = new List<ContainedObject>(grabbableParent.GetComponentsInChildren<ContainedObject>());
             contained.ForEach(x => x.active = !value);
             contained[0].active = value;
