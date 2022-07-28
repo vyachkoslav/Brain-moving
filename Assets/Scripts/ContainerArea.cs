@@ -11,45 +11,37 @@ namespace ControlPanel
     public class ContainerArea : MonoBehaviour
     {
         [SerializeField] float maxOutDistance;
-        List<ContainedObject> children;
-        List<Transform> parents;
 
-        private void Start()
+        private void Update()
         {
-            ResetArea();
-        }
-
-        void ResetArea()
-        {
-            children = new List<ContainedObject>(gameObject.GetComponentsInChildren<ContainedObject>());
-            children = children.FindAll(x => { return x.active; });
-
-            parents = new List<Transform>();
-            foreach (ContainedObject child in children)
-            {
-                parents.Add(child.transform.parent);
-            }
-            Application.onBeforeRender += ClampPositions;
+            ClampPositions();
         }
         private void ClampPositions()
         {
+            var children = GetChildren();
+
+            int size = 0;
             for (int i = 0; i < children.Count; ++i)
             {
                 if (children[i].active)
                 {
+                    size++;
                     Transform child = children[i].transform;
-                    Transform parent = parents[i];
 
                     Vector3 posOnCollider = GetComponent<Collider>().ClosestPoint(child.position);
                     if (OutOfArea(child.position))
                     {
                         child.position = posOnCollider;
-                        child.SetParent(parent);
-                        parent.gameObject.SetActive(false);
-                        parent.gameObject.SetActive(true);
                     }
                 }
             }
+            print(size);
+        }
+        List<ContainedObject> GetChildren()
+        {
+            var children = new List<ContainedObject>(gameObject.GetComponentsInChildren<ContainedObject>());
+            children = children.FindAll(x => { return x.active; });
+            return children;
         }
         bool OutOfArea(Vector3 position)
         {
