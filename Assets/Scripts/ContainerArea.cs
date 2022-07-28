@@ -11,20 +11,24 @@ namespace ControlPanel
     public class ContainerArea : MonoBehaviour
     {
         [SerializeField] float maxOutDistance;
+        List<ContainedObject> allChildren;
 
+        void Start()
+        {
+            allChildren = new List<ContainedObject>(gameObject.GetComponentsInChildren<ContainedObject>());
+        }
         private void Update()
         {
             ClampPositions();
         }
         private void ClampPositions()
         {
-            var children = GetChildren();
+            var children = GetContained();
 
             for (int i = 0; i < children.Count; ++i)
             {
                 if (children[i].active)
                 {
-                    size++;
                     Transform child = children[i].transform;
 
                     Vector3 posOnCollider = GetComponent<Collider>().ClosestPoint(child.position);
@@ -35,11 +39,9 @@ namespace ControlPanel
                 }
             }
         }
-        List<ContainedObject> GetChildren()
+        List<ContainedObject> GetContained()
         {
-            var children = new List<ContainedObject>(gameObject.GetComponentsInChildren<ContainedObject>());
-            children = children.FindAll(x => { return x.active; });
-            return children;
+            return allChildren.FindAll(x => { return x.active; }); ;
         }
         bool OutOfArea(Vector3 position)
         {
