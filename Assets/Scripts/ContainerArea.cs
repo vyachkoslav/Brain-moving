@@ -20,7 +20,6 @@ namespace ControlPanel
         {
             var children = GetChildren();
 
-            int size = 0;
             for (int i = 0; i < children.Count; ++i)
             {
                 if (children[i].active)
@@ -35,7 +34,6 @@ namespace ControlPanel
                     }
                 }
             }
-            print(size);
         }
         List<ContainedObject> GetChildren()
         {
